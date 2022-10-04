@@ -106,6 +106,12 @@ class UserProfile {
       this.inAudit,
       this.uid);
 
+  String get headerPhoto {
+    var photo = privacy.photo.data;
+    if (photo == null || photo.isEmpty) return avatar;
+    return photo;
+  }
+
   List<String> get tagKeys {
     if (hasTag) {
       return List.from(tagList.map((e) => e["keyword"]));

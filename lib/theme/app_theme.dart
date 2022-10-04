@@ -55,6 +55,11 @@ class AppThemeData {
           foregroundColor: colorScheme.primaryContainer,
         ),
       ),
+      dividerTheme: DividerThemeData(
+        color: colorScheme.secondary,
+        indent: 16,
+        endIndent: 16,
+      ),
     );
   }
 
@@ -101,10 +106,10 @@ class AppThemeData {
     bodySmall: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
     headlineSmall: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
     labelSmall: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-    titleMedium: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 13.0),
+    titleMedium: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
     titleSmall: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-    bodyLarge: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 12.0),
-    bodyMedium: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 12.0),
+    bodyLarge: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
+    bodyMedium: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
     titleLarge: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
     labelLarge: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
   );
