@@ -1,4 +1,5 @@
 import 'package:right_one/api/api_service.dart';
+import 'package:right_one/data/cp_candidate_list.dart';
 import 'package:right_one/data/daily_recommend.dart';
 import 'package:right_one/data/heart_beat_me_list.dart';
 import 'package:right_one/data/like_result.dart';
@@ -63,6 +64,18 @@ class CpRepository {
     }
     if (result == null) return {"error": Exception("result is null")};
     var data = HeartBeatMeList.fromJson(result.data);
+    return {"data": data};
+  }
+
+  Future<Map<String, dynamic>> getCpCandidateList() async {
+    Result? result;
+    try {
+      result = await ApiService().getCpCandidateList();
+    } catch (e) {
+      return {"error": e};
+    }
+    if (result == null) return {"error": Exception("result is null")};
+    var data = CpCandidateList.fromJson(result.data);
     return {"data": data};
   }
 

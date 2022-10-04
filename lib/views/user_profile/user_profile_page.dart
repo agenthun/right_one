@@ -1,26 +1,30 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:right_one/data/cp_candidate_list.dart';
+import 'package:right_one/data/user_profile.dart';
 import 'package:right_one/repository/cp_repository.dart';
+import 'package:right_one/views/user_profile/user_profile_widget.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _HomeState();
+  State<StatefulWidget> createState() => _UserProfilePageState();
 }
 
-class _HomeState extends State<Home> {
-  final _streamController = StreamController<CpCandidateList>();
+class _UserProfilePageState extends State<UserProfilePage> {
+  Map<String, dynamic> args = Get.arguments;
+
+  int get _uid => args["uid"];
+
+  final _streamController = StreamController<UserProfile>();
   bool _retry = false;
 
   @override
   void initState() {
     super.initState();
-    _getCpCandidateList();
+    _getUserProfile(_uid);
   }
 
   @override
@@ -29,10 +33,10 @@ class _HomeState extends State<Home> {
     _streamController.close();
   }
 
-  Future<void> _getCpCandidateList() async {
-    var result = await CpRepository().getCpCandidateList();
+  Future<void> _getUserProfile(int uid) async {
+    var result = await CpRepository().getUserProfile(uid);
     Exception? error = result["error"];
-    CpCandidateList? data = result["data"];
+    UserProfile? data = result["data"];
     if (_retry) {
       setState(() {
         _retry = false;
@@ -51,7 +55,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.onBackground,
-      child: StreamBuilder<CpCandidateList>(
+      child: StreamBuilder<UserProfile>(
         stream: _streamController.stream,
         builder: (context, snapshot) {
           if (_retry) {
@@ -61,20 +65,23 @@ class _HomeState extends State<Home> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return Scaffold(
-                body: _buildCpCandidateList(
-                    context, snapshot.data?.list ?? List.empty()),
+                body: _buildUserProfileView(context, snapshot.data!),
                 backgroundColor: Theme.of(context).colorScheme.onBackground,
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    Get.toNamed("/recommend");
-                  },
-                  heroTag: "home_fab_tag_recommend",
-                  child: const Icon(Icons.favorite),
-                ),
               );
             } else {
               var msg = snapshot.hasError ? "出错啦: ${snapshot.error}" : "出错啦!";
-              return _buildError(context, msg);
+              return Scaffold(
+                appBar: AppBar(
+                  leading: BackButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
+                body: _buildError(context, msg),
+                backgroundColor: Theme.of(context).colorScheme.onBackground,
+              );
             }
           } else {
             return _buildLoading();
@@ -86,48 +93,8 @@ class _HomeState extends State<Home> {
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
 
-  Widget _buildCpCandidateList(BuildContext context, List<CpCandidate> list) =>
-      SafeArea(
-        top: true,
-        child: Builder(
-          builder: (BuildContext context) {
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 64),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        var cpCandidate = list[index];
-                        return ListTile(
-                          leading: SizedBox.square(
-                            dimension: 48,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: cpCandidate.avatar,
-                              placeholder: (context, url) => _buildLoading(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.broken_image_rounded),
-                            ),
-                          ),
-                          title: Text(cpCandidate.nickname),
-                          subtitle: Text(cpCandidate.cpStateDesc),
-                          trailing: Text(cpCandidate.cpSource),
-                          onTap: () {
-                            Get.toNamed("/user_profile",
-                                arguments: {"uid": cpCandidate.fuid});
-                          },
-                        );
-                      },
-                      childCount: list.length,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      );
+  Widget _buildUserProfileView(BuildContext context, UserProfile profile) =>
+      UserProfileWidget(profile: profile);
 
   Widget _buildError(BuildContext context, String msg) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +127,7 @@ class _HomeState extends State<Home> {
                     setState(() {
                       _retry = true;
                     });
-                    _getCpCandidateList();
+                    _getUserProfile(_uid);
                   },
                   child: const Text(
                     "再试一次",

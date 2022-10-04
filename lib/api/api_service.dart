@@ -70,6 +70,11 @@ class ApiService {
     return resp.data;
   }
 
+  Future<Result?> getCpCandidateList() async {
+    var resp = await _dio.get("/api/apps/wcp/match/get-cp-candidate-data");
+    return resp.data;
+  }
+
   Future<Result?> like(int uid, {String from = "recommend"}) async {
     var formData =
         FormData.fromMap({"form_id": "undefined", "fuid": uid, "from": from});
