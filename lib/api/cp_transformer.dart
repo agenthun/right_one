@@ -14,12 +14,19 @@ class CpTransformer extends DefaultTransformer {
       if (result.code == 0) {
         return result;
       } else {
-        throw DioError(
-          requestOptions: options,
-          error: result,
+        throw ApiError(
+          result.message,
+          result.code,
         );
       }
     }
     return resp;
   }
+}
+
+class ApiError implements Exception {
+  late String message;
+  late int code;
+
+  ApiError(this.message, this.code);
 }

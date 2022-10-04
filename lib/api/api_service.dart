@@ -16,7 +16,7 @@ class ApiService {
   ApiService._init() {
     var appId = "1560976019693678";
     var token =
-        "1560976019693678_5247899_1690741655_4519047911946d4e0d1c52fecf896cbf";
+        "1560976019693678_5247899_1690812498_6192a20e04b0715872dea12c5825ecd9";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {
@@ -42,45 +42,47 @@ class ApiService {
     ));
   }
 
-  Future<Result?> getUserProfile(int uid, {String from = "recommend"}) {
-    return _request(() {
-      return _dio
-          .get("/api/apps/wcp/user/get-user-profile-start", queryParameters: {
-        "fuid": uid,
-        "from": from,
-      });
+  Future<Result?> getUserProfile(int uid, {String from = "recommend"}) async {
+    var resp = await _dio
+        .get("/api/apps/wcp/user/get-user-profile-start", queryParameters: {
+      "fuid": uid,
+      "from": from,
     });
+    return resp.data;
   }
 
-  Future<Result?> getRecommend() {
-    return _request(() {
-      return _dio.get("/api/apps/wcp/match/get-recommend-data");
-    });
+  Future<Result?> getRecommend() async {
+    var resp = await _dio.get("/api/apps/wcp/match/get-recommend-data");
+    return resp.data;
   }
 
-  Future<Result?> getDailyRecommend() {
-    return _request(() {
-      return _dio.get("/api/apps/wcp/meet/get-featured-recommend-info");
-    });
+  Future<Result?> getDailyRecommend() async {
+    var resp = await _dio.get("/api/apps/wcp/meet/get-featured-recommend-info");
+    return resp.data;
   }
 
-  Future<Result?> getHeartBeatMeList({int start = 0, int num = 10}) {
-    return _request(() {
-      return _dio
-          .get("/api/apps/wcp/match/get-heartbeat-me-list", queryParameters: {
-        "start": start,
-        "num": num,
-      });
+  Future<Result?> getHeartBeatMeList({int start = 0, int num = 10}) async {
+    var resp = await _dio
+        .get("/api/apps/wcp/match/get-heartbeat-me-list", queryParameters: {
+      "start": start,
+      "num": num,
     });
+    return resp.data;
   }
 
-  Future<Result?> _request(Future<Response?> Function() api) async {
-    Response? resp;
-    try {
-      resp = await api();
-    } catch (e) {
-      return null;
-    }
-    return resp?.data;
+  Future<Result?> like(int uid, {String from = "recommend"}) async {
+    var formData =
+        FormData.fromMap({"form_id": "undefined", "fuid": uid, "from": from});
+    var resp =
+        await _dio.post("/api/apps/wcp/like/heartbeat-user", data: formData);
+    return resp.data;
+  }
+
+  Future<Result?> unlike(int uid, {String from = "recommend"}) async {
+    var formData =
+        FormData.fromMap({"form_id": "undefined", "fuid": uid, "from": from});
+    var resp =
+        await _dio.post("/api/apps/wcp/like/discard-user", data: formData);
+    return resp.data;
   }
 }

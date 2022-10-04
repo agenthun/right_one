@@ -41,6 +41,7 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       WechatData.fromJson(json['unlock_wechat_data']),
       json['give_special_heartbeat'] as bool,
       json['in_audit'] as bool,
+      json['uid'] as int?,
     );
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
@@ -77,6 +78,7 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'unlock_wechat_data': instance.unlockWechatData,
       'give_special_heartbeat': instance.giveSpecialHeartbeat,
       'in_audit': instance.inAudit,
+      'uid': instance.uid,
     };
 
 UserStage _$UserStageFromJson(Map<String, dynamic> json) => UserStage(

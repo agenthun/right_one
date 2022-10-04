@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_profile.g.dart';
@@ -71,6 +69,8 @@ class UserProfile {
   @JsonKey(name: "in_audit")
   late bool inAudit;
 
+  late int? uid;
+
   UserProfile(
       this.avatar,
       this.nickname,
@@ -103,7 +103,8 @@ class UserProfile {
       this.isNewUser,
       this.unlockWechatData,
       this.giveSpecialHeartbeat,
-      this.inAudit);
+      this.inAudit,
+      this.uid);
 
   List<String> get tagKeys {
     if (hasTag) {
