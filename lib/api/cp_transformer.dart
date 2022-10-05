@@ -8,7 +8,6 @@ class CpTransformer extends DefaultTransformer {
   Future transformResponse(
       RequestOptions options, ResponseBody response) async {
     var resp = await super.transformResponse(options, response);
-    log("CpTransformer, $resp");
     if (resp is Map<String, dynamic>) {
       var result = Result.fromJson(resp);
       if (result.code == 0) {
@@ -29,4 +28,9 @@ class ApiError implements Exception {
   late int code;
 
   ApiError(this.message, this.code);
+
+  @override
+  String toString() {
+    return 'ApiError{message: $message, code: $code}';
+  }
 }

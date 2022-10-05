@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:right_one/api/api_const.dart';
 import 'package:right_one/api/cp_transformer.dart';
 import 'package:right_one/data/result.dart';
@@ -16,7 +17,7 @@ class ApiService {
   ApiService._init() {
     var appId = "1560976019693678";
     var token =
-        "1560976019693678_5247899_1690824575_0af168fbca9d1098d59dccfab96fa9fc";
+        "1560976019693678_5247899_1690885490_6905f2f3808b8228c9faf9f3824ddd7a";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {
@@ -33,13 +34,15 @@ class ApiService {
   void _initInterceptors() {
     var cookieJar = DefaultCookieJar();
     _dio.interceptors.add(CookieManager(cookieJar));
-    _dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
+    _dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
-      responseHeader: true,
-      compact: false,
+      logPrint: _print,
     ));
+  }
+
+  void _print(Object? object) {
+    log("$object");
   }
 
   Future<Result?> getUserProfile(int uid, {String from = "recommend"}) async {
