@@ -18,7 +18,7 @@ class DailyRecommend {
 @JsonSerializable()
 class FeaturedRecommendUser {
   @JsonKey(name: "uid")
-  late int? uid;
+  late dynamic uid;
   @JsonKey(name: "avatar")
   late String? avatar;
   @JsonKey(name: "nickname")

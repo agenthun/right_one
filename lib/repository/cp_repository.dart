@@ -51,6 +51,9 @@ class CpRepository {
     if (result == null) return {"error": Exception("result is null")};
     var recommend = DailyRecommend.fromJson(result.data);
     var uid = recommend.featuredRecommendUser.uid;
+    if (uid is String) {
+      uid = int.tryParse(uid);
+    }
     if (uid == null) return {"error": Exception("uid is null")};
     return await getUserProfile(uid);
   }

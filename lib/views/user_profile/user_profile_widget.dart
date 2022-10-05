@@ -28,6 +28,18 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
     }
   }
 
+  @override
+  void didUpdateWidget(UserProfileWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.profile != widget.profile) {
+      _audioPlayer.stop();
+      var url = widget.profile.userAudioInfo?.audioUrl;
+      if (url != null && url.isNotEmpty) {
+        _initAudio(url);
+      }
+    }
+  }
+
   Future<void> _initAudio(String url) async {
     try {
       await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(url)));

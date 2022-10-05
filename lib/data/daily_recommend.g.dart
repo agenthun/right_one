@@ -19,7 +19,7 @@ Map<String, dynamic> _$DailyRecommendToJson(DailyRecommend instance) =>
 FeaturedRecommendUser _$FeaturedRecommendUserFromJson(
         Map<String, dynamic> json) =>
     FeaturedRecommendUser(
-      json['uid'] as int?,
+      json['uid'],
       json['avatar'] as String?,
       json['nickname'] as String?,
       json['is_new_user'] as bool?,
