@@ -77,8 +77,12 @@ class _HomeState extends State<Home> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return Scaffold(
-                body: _buildCpCandidateList(
-                    context, snapshot.data ?? List.empty()),
+                body: RefreshIndicator(
+                  onRefresh: _getCpCandidateList,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  child: _buildCpCandidateList(
+                      context, snapshot.data ?? List.empty()),
+                ),
                 backgroundColor: Theme.of(context).colorScheme.onBackground,
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
