@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:right_one/data/cp_candidate_wrapper.dart';
 
 part 'cp_candidate_list.g.dart';
 
@@ -35,6 +36,9 @@ class CpCandidate {
   String get nickname => infoData["title"];
 
   String get cpStateDesc => infoData["des"];
+
+  CpCandidateWrapper toCpCandidateWrapper() =>
+      CpCandidateWrapper(fuid, type, avatar, nickname, cpSource, cpStateDesc);
 
   factory CpCandidate.fromJson(dynamic json) => _$CpCandidateFromJson(json);
 

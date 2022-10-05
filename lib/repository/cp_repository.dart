@@ -64,7 +64,8 @@ class CpRepository {
     }
     if (result == null) return {"error": Exception("result is null")};
     var data = HeartBeatMeList.fromJson(result.data);
-    return {"data": data};
+    var list = data.cpCandidateWrapperList;
+    return {"data": list};
   }
 
   Future<Map<String, dynamic>> getCpCandidateList() async {
@@ -76,7 +77,9 @@ class CpRepository {
     }
     if (result == null) return {"error": Exception("result is null")};
     var data = CpCandidateList.fromJson(result.data);
-    return {"data": data};
+    var list = data.list?.map((e) => e.toCpCandidateWrapper()).toList() ??
+        List.empty();
+    return {"data": list};
   }
 
   Future<Map<String, dynamic>> like(int uid) async {

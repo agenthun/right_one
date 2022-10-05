@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:right_one/data/cp_candidate_list.dart';
+import 'package:right_one/data/cp_candidate_wrapper.dart';
 import 'package:right_one/repository/cp_repository.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final _streamController = StreamController<CpCandidateList>();
+  final _streamController = StreamController<List<CpCandidateWrapper>>();
   bool _retry = false;
 
   @override
@@ -32,18 +32,34 @@ class _HomeState extends State<Home> {
   Future<void> _getCpCandidateList() async {
     var result = await CpRepository().getCpCandidateList();
     Exception? error = result["error"];
-    CpCandidateList? data = result["data"];
+    List<CpCandidateWrapper>? data = result["data"];
+    var heartBeatMeResult = await CpRepository().getHeartBeatMeList();
+    List<CpCandidateWrapper>? heartBeatMeResultData = heartBeatMeResult["data"];
+    var hasHeartBeatMe =
+        heartBeatMeResultData != null && heartBeatMeResultData.isNotEmpty;
     if (_retry) {
       setState(() {
         _retry = false;
       });
     }
     if (error != null) {
-      _streamController.sink.addError(error);
+      if (hasHeartBeatMe) {
+        _streamController.sink.add(heartBeatMeResultData);
+      } else {
+        _streamController.sink.addError(error);
+      }
     } else if (data == null) {
-      _streamController.sink.addError(Exception("UserProfile is null"));
+      if (hasHeartBeatMe) {
+        _streamController.sink.add(heartBeatMeResultData);
+      } else {
+        _streamController.sink.addError(Exception("CpCandidateList is null"));
+      }
     } else {
-      _streamController.sink.add(data);
+      List<CpCandidateWrapper> list = List.from(data);
+      if (hasHeartBeatMe) {
+        list.addAll(heartBeatMeResultData);
+      }
+      _streamController.sink.add(list);
     }
   }
 
@@ -51,7 +67,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.onBackground,
-      child: StreamBuilder<CpCandidateList>(
+      child: StreamBuilder<List<CpCandidateWrapper>>(
         stream: _streamController.stream,
         builder: (context, snapshot) {
           if (_retry) {
@@ -62,7 +78,7 @@ class _HomeState extends State<Home> {
             if (snapshot.hasData) {
               return Scaffold(
                 body: _buildCpCandidateList(
-                    context, snapshot.data?.list ?? List.empty()),
+                    context, snapshot.data ?? List.empty()),
                 backgroundColor: Theme.of(context).colorScheme.onBackground,
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
@@ -86,7 +102,8 @@ class _HomeState extends State<Home> {
 
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
 
-  Widget _buildCpCandidateList(BuildContext context, List<CpCandidate> list) =>
+  Widget _buildCpCandidateList(
+          BuildContext context, List<CpCandidateWrapper> list) =>
       SafeArea(
         top: true,
         child: Builder(
@@ -111,11 +128,16 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           title: Text(cpCandidate.nickname),
-                          subtitle: Text(cpCandidate.cpStateDesc),
+                          subtitle: cpCandidate.cpStateDesc != null
+                              ? Text(cpCandidate.cpStateDesc ?? "")
+                              : null,
                           trailing: Text(cpCandidate.cpSource),
                           onTap: () {
-                            Get.toNamed("/user_profile",
-                                arguments: {"uid": cpCandidate.fuid});
+                            var uid = cpCandidate.uid;
+                            if (uid != null) {
+                              Get.toNamed("/user_profile",
+                                  arguments: {"uid": uid});
+                            }
                           },
                         );
                       },
