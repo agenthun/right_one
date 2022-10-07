@@ -17,7 +17,7 @@ class ApiService {
   ApiService._init() {
     var appId = "1560976019693678";
     var token =
-        "1560976019693678_5247899_1690885490_6905f2f3808b8228c9faf9f3824ddd7a";
+        "1560976019693678_5247899_1690980134_00c431328ee0a9fe8c4773b5c5d8ba47";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {

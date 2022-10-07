@@ -21,9 +21,9 @@ class RecommendData {
   @JsonKey(name: "recommend_type")
   late String recommendType;
   @JsonKey(name: "discard_avatar")
-  late String discardAvatar;
+  late String? discardAvatar;
   @JsonKey(name: "heartbeat_avatar")
-  late String heartbeatAvatar;
+  late String? heartbeatAvatar;
 
   //has data
   @JsonKey(name: "is_advanced_recommend")
@@ -48,6 +48,8 @@ class RecommendData {
       this.advancedRecommendData,
       this.isAuthorizeLocation,
       this.refreshRecommendCountTime);
+
+  bool get isNoRecommend => recommendType == "no_recommend";
 
   factory RecommendData.fromJson(dynamic json) => _$RecommendDataFromJson(json);
 

@@ -19,8 +19,8 @@ Map<String, dynamic> _$RecommendToJson(Recommend instance) => <String, dynamic>{
 RecommendData _$RecommendDataFromJson(Map<String, dynamic> json) =>
     RecommendData(
       json['recommend_type'] as String,
-      json['discard_avatar'] as String,
-      json['heartbeat_avatar'] as String,
+      json['discard_avatar'] as String?,
+      json['heartbeat_avatar'] as String?,
       json['is_advanced_recommend'] as bool?,
       json['recommend_user_data'] == null
           ? null

@@ -36,6 +36,8 @@ class CpRepository {
     }
     if (result == null) return {"error": Exception("result is null")};
     var recommend = Recommend.fromJson(result.data);
+    var isNoRecommend = recommend.recommendData.isNoRecommend;
+    if (isNoRecommend) return {"error": Exception("is no recommend data")};
     var uid = recommend.recommendData.recommendUserData?.uid;
     if (uid == null) return {"error": Exception("uid is null")};
     return await getUserProfile(uid);
