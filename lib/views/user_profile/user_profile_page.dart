@@ -66,7 +66,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             if (snapshot.hasData) {
               return Scaffold(
                 body: _buildUserProfileView(context, snapshot.data!),
-                backgroundColor: Theme.of(context).colorScheme.onBackground,
               );
             } else {
               var msg = snapshot.hasError ? "出错啦: ${snapshot.error}" : "出错啦!";

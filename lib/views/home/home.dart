@@ -83,7 +83,6 @@ class _HomeState extends State<Home> {
                   child: _buildCpCandidateList(
                       context, snapshot.data ?? List.empty()),
                 ),
-                backgroundColor: Theme.of(context).colorScheme.onBackground,
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
                     Get.toNamed("/recommend");
