@@ -17,7 +17,7 @@ class ApiService {
   ApiService._init() {
     var appId = "1560976019693678";
     var token =
-        "1560976019693678_5247899_1690980134_00c431328ee0a9fe8c4773b5c5d8ba47";
+        "1560976019693678_5247899_1691120145_40adc3be4e8474939907579fbcd68f5e";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {
@@ -61,6 +61,14 @@ class ApiService {
 
   Future<Result?> getDailyRecommend() async {
     var resp = await _dio.get("/api/apps/wcp/meet/get-featured-recommend-info");
+    return resp.data;
+  }
+
+  Future<Result?> getRandomRecommend() async {
+    var resp = await _dio
+        .get("/api/apps/wcp/match/get-random-recommend-info", queryParameters: {
+      "sex": "boy",
+    });
     return resp.data;
   }
 

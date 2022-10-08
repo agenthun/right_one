@@ -3,6 +3,7 @@ import 'package:right_one/data/cp_candidate_list.dart';
 import 'package:right_one/data/daily_recommend.dart';
 import 'package:right_one/data/heart_beat_me_list.dart';
 import 'package:right_one/data/like_result.dart';
+import 'package:right_one/data/random_recommend.dart';
 import 'package:right_one/data/recommend.dart';
 import 'package:right_one/data/result.dart';
 import 'package:right_one/data/user_profile.dart';
@@ -57,6 +58,19 @@ class CpRepository {
       uid = int.tryParse(uid);
     }
     if (uid == null) return {"error": Exception("uid is null")};
+    return await getUserProfile(uid);
+  }
+
+  Future<Map<String, dynamic>> getRandomRecommend() async {
+    Result? result;
+    try {
+      result = await ApiService().getRandomRecommend();
+    } catch (e) {
+      return {"error": e};
+    }
+    if (result == null) return {"error": Exception("result is null")};
+    var recommend = RandomRecommend.fromJson(result.data);
+    var uid = recommend.userInfo.uid;
     return await getUserProfile(uid);
   }
 

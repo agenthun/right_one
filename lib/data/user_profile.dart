@@ -29,7 +29,7 @@ class UserProfile {
   @JsonKey(name: "is_vip")
   late bool isVip;
   @JsonKey(name: "stage")
-  late UserStage stage;
+  late UserStage? stage;
   @JsonKey(name: "fuser_status")
   late String fuserStatus;
   @JsonKey(name: "has_king_card")

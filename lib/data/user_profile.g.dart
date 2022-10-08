@@ -19,7 +19,7 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
       json['real_name_status'] as String,
       json['real_person_status'] as String,
       json['is_vip'] as bool,
-      UserStage.fromJson(json['stage']),
+      json['stage'] == null ? null : UserStage.fromJson(json['stage']),
       json['fuser_status'] as String,
       json['has_king_card'] as bool,
       UserPrivacy.fromJson(json['privacy']),

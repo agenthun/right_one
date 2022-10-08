@@ -17,6 +17,7 @@ class RecommendPage extends StatefulWidget {
 class _RecommendPageState extends State<RecommendPage> {
   final _streamController = StreamController<UserProfile>();
   bool _retry = false;
+  UserProfile? _dailyRecommendData;
 
   @override
   void initState() {
@@ -39,8 +40,19 @@ class _RecommendPageState extends State<RecommendPage> {
         _retry = false;
       });
     }
+    var ignoreDailyRecommend = false;
     if (data == null) {
       result = await CpRepository().getDailyRecommend();
+      error = result["error"];
+      data = result["data"];
+      if (_dailyRecommendData?.uid != null &&
+          _dailyRecommendData?.uid == data?.uid) {
+        ignoreDailyRecommend = true;
+      }
+      _dailyRecommendData = data;
+    }
+    if (data == null || ignoreDailyRecommend) {
+      result = await CpRepository().getRandomRecommend();
       error = result["error"];
       data = result["data"];
     }
