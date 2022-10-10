@@ -109,7 +109,17 @@ class _RecommendPageState extends State<RecommendPage> {
   Widget _buildUserProfileView(BuildContext context, UserProfile profile) =>
       Stack(
         children: [
-          UserProfileWidget(profile: profile),
+          UserProfileWidget(
+            profile: profile,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  _getRecommendUserProfile();
+                },
+                icon: const Icon(Icons.skip_next),
+              ),
+            ],
+          ),
           _buildLikeControlView(context, profile),
         ],
       );

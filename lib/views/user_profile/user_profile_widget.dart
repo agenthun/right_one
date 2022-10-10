@@ -6,9 +6,10 @@ import 'package:just_audio/just_audio.dart';
 import 'package:right_one/data/user_profile.dart';
 
 class UserProfileWidget extends StatefulWidget {
-  const UserProfileWidget({super.key, required this.profile});
+  const UserProfileWidget({super.key, required this.profile, this.actions});
 
   final UserProfile profile;
+  final List<Widget>? actions;
 
   @override
   State<StatefulWidget> createState() => _UserProfileWidgetState();
@@ -73,6 +74,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                   ),
                 ),
               ),
+              actions: widget.actions,
               expandedHeight: 350,
               elevation: 0,
             ),
