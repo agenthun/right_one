@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:right_one/data/cp_candidate_wrapper.dart';
 import 'package:right_one/repository/cp_repository.dart';
+import 'package:right_one/wx/wx_helper.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -84,7 +85,10 @@ class _HomeState extends State<Home> {
                       context, snapshot.data ?? List.empty()),
                 ),
                 floatingActionButton: FloatingActionButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await WxHelper().initFluwx();
+                    WxHelper().test();
+                    return;
                     Get.toNamed("/recommend");
                   },
                   heroTag: "home_fab_tag_recommend",
@@ -181,7 +185,10 @@ class _HomeState extends State<Home> {
               aspectRatio: (MediaQuery.of(context).size.width * 0.2) /
                   (MediaQuery.of(context).size.height / 42.0),
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await WxHelper().initFluwx();
+                    WxHelper().test();
+                    return;
                     setState(() {
                       _retry = true;
                     });
