@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:right_one/api/api_const.dart';
+import 'package:right_one/api/cp_transformer.dart';
 import 'package:right_one/data/cp_candidate_wrapper.dart';
 import 'package:right_one/repository/cp_repository.dart';
 
@@ -16,6 +19,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _streamController = StreamController<List<CpCandidateWrapper>>();
   bool _retry = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -77,6 +82,16 @@ class _HomeState extends State<Home> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        _showTokenSettingsDialog();
+                      },
+                      icon: const Icon(Icons.settings),
+                    ),
+                  ],
+                ),
                 body: RefreshIndicator(
                   onRefresh: _getCpCandidateList,
                   color: Theme.of(context).colorScheme.onPrimary,
@@ -93,13 +108,66 @@ class _HomeState extends State<Home> {
               );
             } else {
               var msg = snapshot.hasError ? "出错啦: ${snapshot.error}" : "出错啦!";
-              return _buildError(context, msg);
+              var isLoginError = snapshot.error is DioError &&
+                  (snapshot.error as DioError).error is ApiError &&
+                  ((snapshot.error as DioError).error as ApiError).code == 1000;
+              return _buildError(context, msg, isLoginError);
             }
           } else {
             return _buildLoading();
           }
         },
       ),
+    );
+  }
+
+  Future<void> _showTokenSettingsDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 16.0),
+          title: const Text("设置token"),
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _textEditingController,
+                    decoration: const InputDecoration(
+                      hintText: "token",
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return '请输入token';
+                      }
+                      return null;
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() == true) {
+                          token = _textEditingController.value.text;
+                          Navigator.pop(context);
+                          setState(() {
+                            _retry = true;
+                          });
+                          _getCpCandidateList();
+                        }
+                      },
+                      child: const Text("确认"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -154,7 +222,8 @@ class _HomeState extends State<Home> {
         ),
       );
 
-  Widget _buildError(BuildContext context, String msg) => Column(
+  Widget _buildError(BuildContext context, String msg, bool isLoginError) =>
+      Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
@@ -182,6 +251,10 @@ class _HomeState extends State<Home> {
                   (MediaQuery.of(context).size.height / 42.0),
               child: ElevatedButton(
                   onPressed: () {
+                    if (isLoginError) {
+                      _showTokenSettingsDialog();
+                      return;
+                    }
                     setState(() {
                       _retry = true;
                     });

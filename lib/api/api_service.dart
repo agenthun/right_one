@@ -16,8 +16,6 @@ class ApiService {
 
   ApiService._init() {
     var appId = "1560976019693678";
-    var token =
-        "1560976019693678_5247899_1691120145_40adc3be4e8474939907579fbcd68f5e";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {
@@ -46,59 +44,115 @@ class ApiService {
   }
 
   Future<Result?> getUserProfile(int uid, {String from = "recommend"}) async {
-    var resp = await _dio
-        .get("/api/apps/wcp/user/get-user-profile-start", queryParameters: {
-      "fuid": uid,
-      "from": from,
-    });
+    var resp = await _dio.get(
+      "/api/apps/wcp/user/get-user-profile-start",
+      queryParameters: {
+        "fuid": uid,
+        "from": from,
+      },
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> getRecommend() async {
-    var resp = await _dio.get("/api/apps/wcp/match/get-recommend-data");
+    var resp = await _dio.get(
+      "/api/apps/wcp/match/get-recommend-data",
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> getDailyRecommend() async {
-    var resp = await _dio.get("/api/apps/wcp/meet/get-featured-recommend-info");
+    var resp = await _dio.get(
+      "/api/apps/wcp/meet/get-featured-recommend-info",
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> getRandomRecommend() async {
-    var resp = await _dio
-        .get("/api/apps/wcp/match/get-random-recommend-info", queryParameters: {
-      "sex": "boy",
-    });
+    var resp = await _dio.get(
+      "/api/apps/wcp/match/get-random-recommend-info",
+      queryParameters: {
+        "sex": "boy",
+      },
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> getHeartBeatMeList({int start = 0, int num = 10}) async {
-    var resp = await _dio
-        .get("/api/apps/wcp/match/get-heartbeat-me-list", queryParameters: {
-      "start": start,
-      "num": num,
-    });
+    var resp = await _dio.get(
+      "/api/apps/wcp/match/get-heartbeat-me-list",
+      queryParameters: {
+        "start": start,
+        "num": num,
+      },
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> getCpCandidateList() async {
-    var resp = await _dio.get("/api/apps/wcp/match/get-cp-candidate-data");
+    var resp = await _dio.get(
+      "/api/apps/wcp/match/get-cp-candidate-data",
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> like(int uid, {String from = "recommend"}) async {
     var formData =
         FormData.fromMap({"form_id": "undefined", "fuid": uid, "from": from});
-    var resp =
-        await _dio.post("/api/apps/wcp/like/heartbeat-user", data: formData);
+    var resp = await _dio.post(
+      "/api/apps/wcp/like/heartbeat-user",
+      data: formData,
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 
   Future<Result?> unlike(int uid, {String from = "recommend"}) async {
     var formData =
         FormData.fromMap({"form_id": "undefined", "fuid": uid, "from": from});
-    var resp =
-        await _dio.post("/api/apps/wcp/like/discard-user", data: formData);
+    var resp = await _dio.post(
+      "/api/apps/wcp/like/discard-user",
+      data: formData,
+      options: Options(
+        headers: {
+          "token": token,
+        },
+      ),
+    );
     return resp.data;
   }
 }
