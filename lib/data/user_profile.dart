@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:right_one/data/star_sign.dart';
 
 part 'user_profile.g.dart';
 
@@ -19,7 +20,7 @@ class UserProfile {
   @JsonKey(name: "age")
   late int age;
   @JsonKey(name: "constellation")
-  late String constellation;
+  late String constellation; //星座
   @JsonKey(name: "is_cancellation")
   late bool isCancellation;
   @JsonKey(name: "real_name_status")
@@ -110,6 +111,19 @@ class UserProfile {
     var photo = privacy.photo.data;
     if (photo == null || photo.isEmpty) return avatar;
     return photo;
+  }
+
+  String get birthday {
+    var now = DateTime.now();
+    var nowYear = now.year;
+    var nowMonthTime = MonthTime(now.month, now.day);
+    var monthTimeRange = StarSign.from(constellation)?.monthTimeRange;
+    if (monthTimeRange == null) return (nowYear - age).toString();
+    var isAfter = monthTimeRange.isAfter(nowMonthTime);
+    var isBefore = monthTimeRange.isBefore(nowMonthTime);
+    if (isAfter) return "${nowYear - age - 1}, $monthTimeRange";
+    if (isBefore) return "${nowYear - age}, $monthTimeRange";
+    return "${nowYear - age - 1} or ${nowYear - age}, $monthTimeRange";
   }
 
   List<String> get tagKeys {

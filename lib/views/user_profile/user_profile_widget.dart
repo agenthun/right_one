@@ -119,6 +119,15 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                           case 1:
                             return Column(
                               children: [
+                                ListTile(
+                                  title: const Text("出生年月"),
+                                  trailing: Text(_profile.birthday),
+                                ),
+                              ],
+                            );
+                          case 2:
+                            return Column(
+                              children: [
                                 const Divider(),
                                 ListTile(
                                   title: const Text("家乡"),
@@ -127,41 +136,41 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                                 ),
                               ],
                             );
-                          case 2:
+                          case 3:
                             return ListTile(
                               title: const Text("学校"),
                               trailing: Text("${_profile.basicInfo.school}"),
                             );
-                          case 3:
+                          case 4:
                             return ListTile(
                               title: const Text("学籍状态"),
                               trailing: Text("${_profile.basicInfo.work}"),
                             );
-                          case 4:
+                          case 5:
                             return ListTile(
                               title: const Text("身高"),
                               trailing:
                                   Text("${_profile.privacy.detail.height}"),
                             );
-                          case 5:
+                          case 6:
                             return ListTile(
                               title: const Text("年收入"),
                               trailing: Text(
                                   "${_profile.privacy.detail.annualIncome}"),
                             );
-                          case 6:
+                          case 7:
                             return ListTile(
                               title: const Text("职业"),
                               trailing:
                                   Text("${_profile.privacy.detail.career}"),
                             );
-                          case 7:
+                          case 8:
                             return ListTile(
                               title: const Text("谈过几次恋爱"),
                               trailing:
                                   Text("${_profile.privacy.detail.loveStory}"),
                             );
-                          case 8:
+                          case 9:
                             return Column(
                               children: [
                                 const Divider(),
@@ -172,32 +181,32 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                                 ),
                               ],
                             );
-                          case 9:
+                          case 10:
                             return ListTile(
                               title: const Text("对未来的规划"),
                               subtitle: Text("${_profile.moreInfo.future}"),
                             );
-                          case 10:
+                          case 11:
                             return ListTile(
                               title: const Text("成长经历"),
                               subtitle: Text("${_profile.moreInfo.growUp}"),
                             );
-                          case 11:
+                          case 12:
                             return ListTile(
                               title: const Text("你觉得最浪漫的事情是"),
                               subtitle: Text("${_profile.moreInfo.romantic}"),
                             );
-                          case 12:
+                          case 13:
                             return ListTile(
                               title: const Text("去过的地方"),
                               subtitle: Text("${_profile.moreInfo.travel}"),
                             );
-                          case 13:
+                          case 14:
                             return ListTile(
                               title: const Text("什么样的CP会吸引你"),
                               subtitle: Text("${_profile.moreInfo.whatCp}"),
                             );
-                          case 14:
+                          case 15:
                             return Column(
                               children: [
                                 const Divider(),
@@ -207,7 +216,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                                 ),
                               ],
                             );
-                          case 15:
+                          case 16:
                             return ListTile(
                               title: const Text("音色测评"),
                               subtitle: Text(
@@ -250,7 +259,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                             );
                         }
                       },
-                      childCount: 15 + (_profile.userAudioInfo != null ? 1 : 0),
+                      childCount: 16 + (_profile.userAudioInfo != null ? 1 : 0),
                     ),
                   ),
                 ),
