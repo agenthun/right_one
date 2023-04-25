@@ -1,3 +1,4 @@
+import 'package:right_one/api/api_const.dart';
 import 'package:right_one/api/api_service.dart';
 import 'package:right_one/data/cp_candidate_list.dart';
 import 'package:right_one/data/daily_recommend.dart';
@@ -89,6 +90,15 @@ class CpRepository {
 
   Future<Map<String, dynamic>> getCpCandidateList() async {
     Result? result;
+    // try {
+    //   result = await ApiService().refreshAccessToken(
+    //       "1576511275532286_8975626_1997798672_80a1412823f8f204846df73d1ba48891");
+    // } catch (e) {
+    //   print("hun.test.error, $e");
+    // }
+    // print("hun.test, $result");
+    token =
+        "1576511275532286_8975626_1708358672_73dfc984a917618d15a1462f0ae5e096";
     try {
       result = await ApiService().getCpCandidateList();
     } catch (e) {
