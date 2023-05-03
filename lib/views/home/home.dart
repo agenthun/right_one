@@ -110,7 +110,10 @@ class _HomeState extends State<Home> {
               var msg = snapshot.hasError ? "出错啦: ${snapshot.error}" : "出错啦!";
               var isLoginError = snapshot.error is DioError &&
                   (snapshot.error as DioError).error is ApiError &&
-                  ((snapshot.error as DioError).error as ApiError).code == 1000;
+                  (((snapshot.error as DioError).error as ApiError).code ==
+                          1000 ||
+                      ((snapshot.error as DioError).error as ApiError).code ==
+                          10000);
               return _buildError(context, msg, isLoginError);
             }
           } else {
