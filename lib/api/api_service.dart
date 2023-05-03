@@ -16,7 +16,6 @@ class ApiService {
 
   ApiService._init() {
     var appId = "1560976019693678";
-    appId = "1576511275532286";
     var options = BaseOptions(
       baseUrl: yizhoucp_host,
       headers: {
@@ -42,20 +41,6 @@ class ApiService {
 
   void _print(Object? object) {
     log("$object");
-  }
-
-  Future<Result?> refreshAccessToken(String refreshToken) async {
-    var formData = FormData.fromMap({"refresh_token": refreshToken});
-    var resp = await _dio.post(
-      "/api/auth/renew-access-token",
-      data: formData,
-      options: Options(
-        headers: {
-          "token": token,
-        },
-      ),
-    );
-    return resp.data;
   }
 
   Future<Result?> getUserProfile(int uid, {String from = "recommend"}) async {
